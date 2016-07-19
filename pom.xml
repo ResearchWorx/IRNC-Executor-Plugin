@@ -80,10 +80,10 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>edu.uky.ukhc.genomics.Main</mainClass>
+							<mainClass>edu.uky.irnc.executor.Plugin</mainClass>
 						</manifest>
 						<manifestEntries>
-							<artifactId>dashboard-plugin</artifactId>
+							<artifactId>executor-plugin</artifactId>
 							<Implementation-Version>${project.version}.${buildNumber}.${maven.build.timestamp}</Implementation-Version>
 						</manifestEntries>
 					</archive>

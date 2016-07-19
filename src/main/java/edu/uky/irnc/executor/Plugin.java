@@ -153,4 +153,8 @@ public class Plugin extends CPlugin {
             }
         }
     }
+
+    public static void main(String[] args) {
+        System.out.println("This is not meant to be used outside of the Cresco framework.");
+    }
 }
