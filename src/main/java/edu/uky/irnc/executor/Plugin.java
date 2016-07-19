@@ -59,30 +59,33 @@ public class Plugin extends CPlugin {
                 ProcessBuilder pb = new ProcessBuilder("sudo","bash","-c", command);
                 final Process p = pb.start();
 
-                StreamGobbler errorGobbler = new StreamGobbler(p.getErrorStream(), plugin, dstPlugin);
-                StreamGobbler outputGobbler = new StreamGobbler(p.getInputStream(), plugin, dstPlugin);
+                if (!command.startsWith("sendudp")) {
+                    StreamGobbler errorGobbler = new StreamGobbler(p.getErrorStream(), plugin, dstPlugin);
+                    StreamGobbler outputGobbler = new StreamGobbler(p.getInputStream(), plugin, dstPlugin);
 
-                errorGobbler.start();
-                outputGobbler.start();
+                    errorGobbler.start();
+                    outputGobbler.start();
+                }
 
                 int exitValue = p.waitFor();
 
-                Map<String, String> params = new HashMap<>();
-                params.put("src_region", plugin.getRegion());
-                params.put("src_agent", plugin.getAgent());
-                params.put("src_plugin", plugin.getPluginID());
-                params.put("dst_region", plugin.getRegion());
-                params.put("dst_agent", plugin.getAgent());
-                params.put("dst_plugin", dstPlugin);
-                params.put("cmd", "execution_log");
-                params.put("exchange", exchangeID);
-                params.put("log", "[" + new Date() + "] " + Integer.toString(exitValue));
-                plugin.sendMsgEvent(new MsgEvent(MsgEvent.Type.EXEC, plugin.getRegion(), plugin.getAgent(),
-                        plugin.getPluginID(), params));
-
                 complete = true;
                 if (!command.startsWith("sendudp")) {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("src_region", plugin.getRegion());
+                    params.put("src_agent", plugin.getAgent());
+                    params.put("src_plugin", plugin.getPluginID());
+                    params.put("dst_region", plugin.getRegion());
+                    params.put("dst_agent", plugin.getAgent());
+                    params.put("dst_plugin", dstPlugin);
+                    params.put("cmd", "execution_log");
+                    params.put("exchange", exchangeID);
+                    params.put("log", "[" + new Date() + "] " + Integer.toString(exitValue));
+                    plugin.sendMsgEvent(new MsgEvent(MsgEvent.Type.EXEC, plugin.getRegion(), plugin.getAgent(),
+                            plugin.getPluginID(), params));
+
                     Thread.sleep(500);
+
                     params = new HashMap<>();
                     params.put("src_region", plugin.getRegion());
                     params.put("src_agent", plugin.getAgent());
