@@ -80,6 +80,8 @@ public class Plugin extends CPlugin {
                 plugin.sendMsgEvent(new MsgEvent(MsgEvent.Type.EXEC, plugin.getRegion(), plugin.getAgent(),
                         plugin.getPluginID(), params));
 
+                Thread.sleep(500);
+
                 complete = true;
                 params = new HashMap<>();
                 params.put("src_region", plugin.getRegion());
