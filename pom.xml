@@ -72,7 +72,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<mainClass>edu.uky.ukhc.genomics.Main</mainClass>
+					<mainClass>edu.uky.irnc.executor.Plugin</mainClass>
 				</configuration>
 			</plugin>
 			<plugin>
