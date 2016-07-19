@@ -80,20 +80,21 @@ public class Plugin extends CPlugin {
                 plugin.sendMsgEvent(new MsgEvent(MsgEvent.Type.EXEC, plugin.getRegion(), plugin.getAgent(),
                         plugin.getPluginID(), params));
 
-                Thread.sleep(500);
-
                 complete = true;
-                params = new HashMap<>();
-                params.put("src_region", plugin.getRegion());
-                params.put("src_agent", plugin.getAgent());
-                params.put("src_plugin", plugin.getPluginID());
-                params.put("dst_region", plugin.getRegion());
-                params.put("dst_agent", plugin.getAgent());
-                params.put("dst_plugin", dstPlugin);
-                params.put("cmd", "delete_exchange");
-                params.put("exchange", exchangeID);
-                plugin.sendMsgEvent(new MsgEvent(MsgEvent.Type.EXEC, plugin.getRegion(), plugin.getAgent(),
-                        plugin.getPluginID(), params));
+                if (!command.startsWith("sendudp")) {
+                    Thread.sleep(500);
+                    params = new HashMap<>();
+                    params.put("src_region", plugin.getRegion());
+                    params.put("src_agent", plugin.getAgent());
+                    params.put("src_plugin", plugin.getPluginID());
+                    params.put("dst_region", plugin.getRegion());
+                    params.put("dst_agent", plugin.getAgent());
+                    params.put("dst_plugin", dstPlugin);
+                    params.put("cmd", "delete_exchange");
+                    params.put("exchange", exchangeID);
+                    plugin.sendMsgEvent(new MsgEvent(MsgEvent.Type.EXEC, plugin.getRegion(), plugin.getAgent(),
+                            plugin.getPluginID(), params));
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();
