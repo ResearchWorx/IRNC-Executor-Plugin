@@ -1,0 +1,4 @@
+executor-plugin.iml
+.idea
+target/
+*.ini
