@@ -107,6 +107,7 @@ public class Plugin extends CPlugin {
                     plugin.sendMsgEvent(new MsgEvent(MsgEvent.Type.EXEC, plugin.getRegion(), plugin.getAgent(),
                             plugin.getPluginID(), params));
                 } else {
+                    Thread.sleep(5000);
                     logger.trace("Sending Plugin Removal request");
                     Map<String, String> params = new HashMap<>();
                     params.put("src_region", plugin.getRegion());
