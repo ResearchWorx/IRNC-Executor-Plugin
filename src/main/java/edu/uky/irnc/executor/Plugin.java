@@ -32,7 +32,8 @@ public class Plugin extends CPlugin {
     }
 
     private static class Runner implements Runnable {
-        private static Set<String> executables = new HashSet<>(Arrays.asList("netflow", "packet_trace", "packet_validation", "sendudp"));
+        private static Set<String> executables = new HashSet<>(Arrays.asList("netflow", "packet_trace",
+                "packet_validation", "sendudp"));
         private Plugin plugin;
         private CLogger logger;
         private String command;
@@ -43,7 +44,8 @@ public class Plugin extends CPlugin {
             this.plugin = plugin;
             this.command = command;
             this.dstPlugin = dstPlugin;
-            logger = new CLogger(Runner.class, plugin.getMsgOutQueue(), plugin.getRegion(), plugin.getAgent(), plugin.getPluginID(), CLogger.Level.Trace);
+            logger = new CLogger(Runner.class, plugin.getMsgOutQueue(), plugin.getRegion(), plugin.getAgent(),
+                    plugin.getPluginID(), CLogger.Level.Trace);
         }
 
         @Override
@@ -75,7 +77,8 @@ public class Plugin extends CPlugin {
                 params.put("cmd", "execution_log");
                 params.put("exchange", exchangeID);
                 params.put("log", "[" + new Date() + "] " + Integer.toString(exitValue));
-                plugin.sendMsgEvent(new MsgEvent(MsgEvent.Type.EXEC, plugin.getRegion(), plugin.getAgent(), plugin.getPluginID(), params));
+                plugin.sendMsgEvent(new MsgEvent(MsgEvent.Type.EXEC, plugin.getRegion(), plugin.getAgent(),
+                        plugin.getPluginID(), params));
 
                 complete = true;
                 params = new HashMap<>();
@@ -87,7 +90,8 @@ public class Plugin extends CPlugin {
                 params.put("dst_plugin", dstPlugin);
                 params.put("cmd", "delete_exchange");
                 params.put("exchange", exchangeID);
-                plugin.sendMsgEvent(new MsgEvent(MsgEvent.Type.EXEC, plugin.getRegion(), plugin.getAgent(), plugin.getPluginID(), params));
+                plugin.sendMsgEvent(new MsgEvent(MsgEvent.Type.EXEC, plugin.getRegion(), plugin.getAgent(),
+                        plugin.getPluginID(), params));
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -104,7 +108,8 @@ public class Plugin extends CPlugin {
                 this.is = is;
                 this.plugin = plugin;
                 this.dstPlugin = dstPlugin;
-                logger = new CLogger(StreamGobbler.class, plugin.getMsgOutQueue(), plugin.getRegion(), plugin.getAgent(), plugin.getPluginID(), CLogger.Level.Trace);
+                logger = new CLogger(StreamGobbler.class, plugin.getMsgOutQueue(), plugin.getRegion(),
+                        plugin.getAgent(), plugin.getPluginID(), CLogger.Level.Trace);
             }
 
             @Override
@@ -125,7 +130,8 @@ public class Plugin extends CPlugin {
                         params.put("cmd", "execution_log");
                         params.put("exchange", exchangeID);
                         params.put("log", "[" + new Date() + "] " + line);
-                        plugin.sendMsgEvent(new MsgEvent(MsgEvent.Type.EXEC, plugin.getRegion(), plugin.getAgent(), plugin.getPluginID(), params));
+                        plugin.sendMsgEvent(new MsgEvent(MsgEvent.Type.EXEC, plugin.getRegion(), plugin.getAgent(),
+                                plugin.getPluginID(), params));
                     }
                     br.close();
                 } catch (IOException e) {
@@ -138,7 +144,8 @@ public class Plugin extends CPlugin {
             if (!complete) {
                 logger.info("Killing process");
                 try {
-                    ProcessBuilder pb = new ProcessBuilder("sudo", "bash", "-c", "kill -2 $(ps aux | grep '[" + exchangeID.charAt(0) + "]" + exchangeID.substring(1) + "' | awk '{print $2}')");
+                    ProcessBuilder pb = new ProcessBuilder("sudo", "bash", "-c", "kill -2 $(ps aux | grep '[" +
+                            exchangeID.charAt(0) + "]" + exchangeID.substring(1) + "' | awk '{print $2}')");
                     pb.start();
                 } catch (IOException e) {
                     logger.error("IOException in shutdown() : " + e.getMessage());
