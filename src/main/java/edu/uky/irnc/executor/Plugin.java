@@ -51,26 +51,34 @@ public class Plugin extends CPlugin {
         @Override
         public void run() {
             try {
+                logger.info("Running Runner");
+                logger.debug("command={}", command);
                 boolean canRun = false;
+                logger.trace("Checking to see if eligable for running");
                 for (String executable : executables)
                     if (command.startsWith(executable))
                         canRun = true;
+                logger.debug("canRun = {}", canRun);
                 if (!canRun) return;
+                logger.trace("Setting up ProcessBuilder");
                 ProcessBuilder pb = new ProcessBuilder("sudo","bash","-c", command);
+                logger.trace("Starting Process");
                 final Process p = pb.start();
 
                 if (!command.startsWith("sendudp")) {
+                    logger.trace("Starting Output Forwarders");
                     StreamGobbler errorGobbler = new StreamGobbler(p.getErrorStream(), plugin, dstPlugin);
                     StreamGobbler outputGobbler = new StreamGobbler(p.getInputStream(), plugin, dstPlugin);
 
                     errorGobbler.start();
                     outputGobbler.start();
                 }
-
+                logger.trace("Waiting for process completion");
                 int exitValue = p.waitFor();
-
+                logger.trace("Process has completed");
                 complete = true;
                 if (!command.startsWith("sendudp")) {
+                    logger.trace("Sending exitValue log");
                     Map<String, String> params = new HashMap<>();
                     params.put("src_region", plugin.getRegion());
                     params.put("src_agent", plugin.getAgent());
@@ -86,6 +94,7 @@ public class Plugin extends CPlugin {
 
                     Thread.sleep(500);
 
+                    logger.trace("Sending Exchange Deletion request");
                     params = new HashMap<>();
                     params.put("src_region", plugin.getRegion());
                     params.put("src_agent", plugin.getAgent());
@@ -96,6 +105,18 @@ public class Plugin extends CPlugin {
                     params.put("cmd", "delete_exchange");
                     params.put("exchange", exchangeID);
                     plugin.sendMsgEvent(new MsgEvent(MsgEvent.Type.EXEC, plugin.getRegion(), plugin.getAgent(),
+                            plugin.getPluginID(), params));
+                } else {
+                    logger.trace("Sending Plugin Removal request");
+                    Map<String, String> params = new HashMap<>();
+                    params.put("src_region", plugin.getRegion());
+                    params.put("src_agent", plugin.getAgent());
+                    params.put("src_plugin", plugin.getPluginID());
+                    params.put("dst_region", plugin.getRegion());
+                    params.put("dst_agent", plugin.getAgent());
+                    params.put("configtype", "pluginremove");
+                    params.put("plugin", plugin.getPluginID());
+                    plugin.sendMsgEvent(new MsgEvent(MsgEvent.Type.CONFIG, plugin.getRegion(), plugin.getAgent(),
                             plugin.getPluginID(), params));
                 }
 
