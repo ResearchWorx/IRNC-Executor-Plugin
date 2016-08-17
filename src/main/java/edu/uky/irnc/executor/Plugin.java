@@ -33,7 +33,7 @@ public class Plugin extends CPlugin {
 
     private static class Runner implements Runnable {
         private static Set<String> executables = new HashSet<>(Arrays.asList("netflow", "packet_trace",
-                "packet_validation", "sendudp"));
+                "packet_validation", "sendudp", "kanon"));
         private Plugin plugin;
         private CLogger logger;
         private String command;
@@ -91,8 +91,6 @@ public class Plugin extends CPlugin {
                     params.put("log", "[" + new Date() + "] " + Integer.toString(exitValue));
                     plugin.sendMsgEvent(new MsgEvent(MsgEvent.Type.EXEC, plugin.getRegion(), plugin.getAgent(),
                             plugin.getPluginID(), params));
-
-                    Thread.sleep(500);
 
                     logger.trace("Sending Exchange Deletion request");
                     params = new HashMap<>();
