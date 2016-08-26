@@ -73,14 +73,7 @@ public class Plugin extends CPlugin {
                     errorGobbler.start();
                     outputGobbler.start();
                 }
-                else if (!command.startsWith("kanon")) {
-                    logger.trace("Starting Output Forwarders");
-                    StreamGobbler errorGobbler = new StreamGobbler(p.getErrorStream(), plugin, dstPlugin);
-                    StreamGobbler outputGobbler = new StreamGobbler(p.getInputStream(), plugin, dstPlugin);
 
-                    errorGobbler.start();
-                    outputGobbler.start();
-                }
                 logger.trace("Waiting for process completion");
                 int exitValue = p.waitFor();
                 logger.trace("Process has completed");
