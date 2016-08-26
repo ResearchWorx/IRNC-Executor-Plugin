@@ -52,7 +52,7 @@ public class Plugin extends CPlugin {
         public void run() {
             try {
                 logger.info("Running Runner");
-
+                logger.info("Command: [" + command + "]");
                 logger.debug("command={}", command);
                 boolean canRun = false;
                 logger.trace("Checking to see if eligable for running");
