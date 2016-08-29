@@ -55,8 +55,8 @@ public class Plugin extends CPlugin {
         public void run() {
             try {
                 logger.info("Running Runner");
-                logger.info("Command: [" + command + "]");
-                logger.info("command={}", command);
+                //logger.info("Command: [" + command + "]");
+                //logger.info("command={}", command);
                 boolean canRun = false;
                 logger.trace("Checking to see if eligable for running");
                 for (String executable : executables)
