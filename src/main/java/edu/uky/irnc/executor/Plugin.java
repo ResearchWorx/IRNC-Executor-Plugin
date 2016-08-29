@@ -69,11 +69,11 @@ public class Plugin extends CPlugin {
                 if (requiresSudo)
                     pb = new ProcessBuilder("sudo","bash","-c", command);
                 else
-                    pb = new ProcessBuilder(command);
+                    pb = new ProcessBuilder("/bin/sh", "-c", command);
                 logger.trace("Starting Process");
                 final Process p = pb.start();
 
-                if (!command.startsWith("sendudp") && !command.startsWith("kanon")) {
+                if (!command.startsWith("sendudp")) {
                     logger.trace("Starting Output Forwarders");
                     StreamGobbler errorGobbler = new StreamGobbler(p.getErrorStream(), plugin, dstPlugin);
                     StreamGobbler outputGobbler = new StreamGobbler(p.getInputStream(), plugin, dstPlugin);
