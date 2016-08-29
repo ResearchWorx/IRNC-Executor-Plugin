@@ -56,7 +56,7 @@ public class Plugin extends CPlugin {
             try {
                 logger.info("Running Runner");
                 logger.info("Command: [" + command + "]");
-                logger.debug("command={}", command);
+                logger.info("command={}", command);
                 boolean canRun = false;
                 logger.trace("Checking to see if eligable for running");
                 for (String executable : executables)
@@ -73,7 +73,7 @@ public class Plugin extends CPlugin {
                 logger.trace("Starting Process");
                 final Process p = pb.start();
 
-                if (!command.startsWith("sendudp")) {
+                if (!command.startsWith("sendudp") && !command.startsWith("kanon")) {
                     logger.trace("Starting Output Forwarders");
                     StreamGobbler errorGobbler = new StreamGobbler(p.getErrorStream(), plugin, dstPlugin);
                     StreamGobbler outputGobbler = new StreamGobbler(p.getInputStream(), plugin, dstPlugin);
@@ -86,7 +86,7 @@ public class Plugin extends CPlugin {
                 int exitValue = p.waitFor();
                 logger.trace("Process has completed");
                 complete = true;
-                if (!command.startsWith("sendudp")) {
+                if (!command.startsWith("sendudp") && !command.startsWith("kanon")) {
                     logger.trace("Sending exitValue log");
                     Map<String, String> params = new HashMap<>();
                     params.put("src_region", plugin.getRegion());
