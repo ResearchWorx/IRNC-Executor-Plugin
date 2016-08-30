@@ -41,7 +41,6 @@ public class Plugin extends CPlugin {
         private String command;
         private String dstPlugin;
         private String requiresSudo;
-        private Process p;
         private boolean complete = false;
 
         Runner(Plugin plugin, String command, String dstPlugin, String requiresSudo) {
@@ -70,11 +69,10 @@ public class Plugin extends CPlugin {
                 ProcessBuilder pb;
                 if (requiresSudo.equals("true"))
                     pb = new ProcessBuilder("sudo", "bash", "-c", command);
-                else {
-                    pb = new ProcessBuilder("base", "-c", command);
-                }
+                else
+                    pb = new ProcessBuilder("/bin/sh", "-c", command);
                 logger.trace("Starting Process");
-                p = pb.start();
+                final Process p = pb.start();
 
                 if (!command.startsWith("sendudp")) {
                     logger.trace("Starting Output Forwarders");
@@ -182,13 +180,9 @@ public class Plugin extends CPlugin {
             if (!complete) {
                 logger.info("Killing process");
                 try {
-                    if (command.startsWith("kanon")) {
-                        p.destroy();
-                    } else {
-                        ProcessBuilder pb = new ProcessBuilder("sudo", "bash", "-c", "kill -2 $(ps aux | grep '[" +
-                                exchangeID.charAt(0) + "]" + exchangeID.substring(1) + "' | awk '{print $2}')");
-                        pb.start();
-                    }
+                    ProcessBuilder pb = new ProcessBuilder("sudo", "bash", "-c", "kill -2 $(ps aux | grep '[" +
+                            exchangeID.charAt(0) + "]" + exchangeID.substring(1) + "' | awk '{print $2}')");
+                    pb.start();
                 } catch (IOException e) {
                     logger.error("IOException in shutdown() : " + e.getMessage());
                 }
