@@ -72,6 +72,7 @@ public class Plugin extends CPlugin {
                 else {
                     String program = command.substring(0, command.indexOf(" "));
                     String args = command.substring(command.indexOf(" ") + 1);
+                    logger.trace("Program={}, Args={}", program, args);
                     pb = new ProcessBuilder(program, args);
                 }
                 logger.trace("Starting Process");
