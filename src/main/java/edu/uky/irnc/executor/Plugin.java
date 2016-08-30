@@ -183,6 +183,7 @@ public class Plugin extends CPlugin {
                 try {
                     if (command.toLowerCase().startsWith("kanon")) {
                         p.destroy();
+                        logger.info("Exit code:{}", p.exitValue());
                     } else {
                         ProcessBuilder pb = new ProcessBuilder("sudo", "bash", "-c", "kill -2 $(ps aux | grep '[" +
                                 exchangeID.charAt(0) + "]" + exchangeID.substring(1) + "' | awk '{print $2}')");
