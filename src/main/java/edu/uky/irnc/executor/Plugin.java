@@ -17,7 +17,7 @@ public class Plugin extends CPlugin {
     public void start() {
         String runCommand = config.getStringParam("runCommand");
         String dstPlugin = config.getStringParam("dstPlugin");
-        String requiresSudo = config.getStringParam("sudo", "true");
+        String requiresSudo = config.getStringParam("requiresSudo", "true");
         logger.info("sudo = {}", requiresSudo);
         exchangeID = runCommand.substring(runCommand.lastIndexOf(" ") + 1);
         executeCommand(runCommand, dstPlugin, requiresSudo);
