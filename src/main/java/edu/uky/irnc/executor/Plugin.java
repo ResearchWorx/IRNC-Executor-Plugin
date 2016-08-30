@@ -41,6 +41,7 @@ public class Plugin extends CPlugin {
         private String command;
         private String dstPlugin;
         private String requiresSudo;
+        private Process p;
         private boolean complete = false;
 
         Runner(Plugin plugin, String command, String dstPlugin, String requiresSudo) {
@@ -72,7 +73,7 @@ public class Plugin extends CPlugin {
                 else
                     pb = new ProcessBuilder("/bin/sh", "-c", command);
                 logger.trace("Starting Process");
-                final Process p = pb.start();
+                p = pb.start();
 
                 if (!command.startsWith("sendudp")) {
                     logger.trace("Starting Output Forwarders");
