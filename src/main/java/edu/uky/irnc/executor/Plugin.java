@@ -70,7 +70,7 @@ public class Plugin extends CPlugin {
                 if (requiresSudo.equals("true"))
                     pb = new ProcessBuilder("sudo","bash","-c", command);
                 else
-                    pb = new ProcessBuilder(command);
+                    pb = new ProcessBuilder("/bin/sh","-c",command);
                 logger.trace("Starting Process");
                 final Process p = pb.start();
 
