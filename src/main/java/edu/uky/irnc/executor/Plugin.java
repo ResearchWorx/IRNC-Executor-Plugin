@@ -183,7 +183,7 @@ public class Plugin extends CPlugin {
                 try {
                     if (command.toLowerCase().startsWith("kanon")) {
                         ProcessBuilder pb = new ProcessBuilder("sudo", "bash", "-c", "kill -2 $(ps aux | grep '" +
-                                command + "' | awk '{print $2}')");
+                                command.substring(0, command.indexOf("'")) + "' | awk '{print $2}')");
                         pb.start();
                     } else {
                         ProcessBuilder pb = new ProcessBuilder("sudo", "bash", "-c", "kill -2 $(ps aux | grep '[" +
