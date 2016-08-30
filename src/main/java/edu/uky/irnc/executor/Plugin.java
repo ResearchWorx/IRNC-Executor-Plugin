@@ -17,7 +17,7 @@ public class Plugin extends CPlugin {
     public void start() {
         String runCommand = config.getStringParam("runCommand");
         String dstPlugin = config.getStringParam("dstPlugin");
-        boolean requiresSudo = config.getBooleanParam("sudo", true);
+        String requiresSudo = config.getStringParam("sudo", "true");
         exchangeID = runCommand.substring(runCommand.lastIndexOf(" ") + 1);
         executeCommand(runCommand, dstPlugin, requiresSudo);
     }
@@ -27,7 +27,7 @@ public class Plugin extends CPlugin {
         runner.shutdown();
     }
 
-    private void executeCommand(String command, String dstPlugin, boolean requiresSudo) {
+    private void executeCommand(String command, String dstPlugin, String requiresSudo) {
         runner = new Runner(this, command, dstPlugin, requiresSudo);
         new Thread(runner).start();
     }
@@ -39,10 +39,10 @@ public class Plugin extends CPlugin {
         private CLogger logger;
         private String command;
         private String dstPlugin;
-        private boolean requiresSudo;
+        private String requiresSudo;
         private boolean complete = false;
 
-        Runner(Plugin plugin, String command, String dstPlugin, boolean requiresSudo) {
+        Runner(Plugin plugin, String command, String dstPlugin, String requiresSudo) {
             this.plugin = plugin;
             this.command = command;
             this.dstPlugin = dstPlugin;
@@ -66,10 +66,10 @@ public class Plugin extends CPlugin {
                 if (!canRun) return;
                 logger.trace("Setting up ProcessBuilder");
                 ProcessBuilder pb;
-                if (requiresSudo)
+                if (requiresSudo.equals("true"))
                     pb = new ProcessBuilder("sudo","bash","-c", command);
                 else
-                    pb = new ProcessBuilder("/bin/sh", "-c", command);
+                    pb = new ProcessBuilder(command);
                 logger.trace("Starting Process");
                 final Process p = pb.start();
 
