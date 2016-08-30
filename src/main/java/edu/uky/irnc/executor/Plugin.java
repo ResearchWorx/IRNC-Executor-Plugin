@@ -181,9 +181,13 @@ public class Plugin extends CPlugin {
             if (!complete) {
                 logger.info("Killing process");
                 try {
-                    ProcessBuilder pb = new ProcessBuilder("sudo", "bash", "-c", "kill -2 $(ps aux | grep '[" +
-                            exchangeID.charAt(0) + "]" + exchangeID.substring(1) + "' | awk '{print $2}')");
-                    pb.start();
+                    if (command.toLowerCase().startsWith("kanon")) {
+                        p.destroy();
+                    } else {
+                        ProcessBuilder pb = new ProcessBuilder("sudo", "bash", "-c", "kill -2 $(ps aux | grep '[" +
+                                exchangeID.charAt(0) + "]" + exchangeID.substring(1) + "' | awk '{print $2}')");
+                        pb.start();
+                    }
                 } catch (IOException e) {
                     logger.error("IOException in shutdown() : " + e.getMessage());
                 }
