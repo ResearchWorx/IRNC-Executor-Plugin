@@ -88,7 +88,7 @@ public class Plugin extends CPlugin {
                 int exitValue = p.waitFor();
                 logger.trace("Process has completed");
                 complete = true;
-                if (!command.startsWith("sendudp") && !command.startsWith("kanon")) {
+                if (!command.startsWith("sendudp")) {
                     logger.trace("Sending exitValue log");
                     Map<String, String> params = new HashMap<>();
                     params.put("src_region", plugin.getRegion());
