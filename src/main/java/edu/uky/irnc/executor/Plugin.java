@@ -169,10 +169,13 @@ public class Plugin extends CPlugin {
                         params.put("log", "[" + new Date() + "] " + line);
                         plugin.sendMsgEvent(new MsgEvent(MsgEvent.Type.EXEC, plugin.getRegion(), plugin.getAgent(),
                                 plugin.getPluginID(), params));
+                        Thread.sleep(50);
                     }
                     br.close();
                 } catch (IOException e) {
                     logger.error("run() : {}", e.getMessage());
+                } catch (InterruptedException e) {
+                    logger.error("run() : Interrupted : {}", e.getMessage());
                 }
             }
         }
