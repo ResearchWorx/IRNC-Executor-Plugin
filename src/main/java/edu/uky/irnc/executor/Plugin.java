@@ -164,6 +164,7 @@ public class Plugin extends CPlugin {
                         params.put("dst_region", plugin.getRegion());
                         params.put("dst_agent", plugin.getAgent());
                         params.put("dst_plugin", dstPlugin);
+                        params.put("ts", Long.toString(new Date().getTime()));
                         params.put("cmd", "execution_log");
                         params.put("exchange", exchangeID);
                         params.put("log", "[" + new Date() + "] " + line);
