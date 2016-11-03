@@ -99,6 +99,7 @@ public class Plugin extends CPlugin {
                     params.put("dst_plugin", dstPlugin);
                     params.put("cmd", "execution_log");
                     params.put("exchange", exchangeID);
+                    params.put("ts", Long.toString(new Date().getTime()));
                     params.put("log", "[" + new Date() + "] " + Integer.toString(exitValue));
                     plugin.sendMsgEvent(new MsgEvent(MsgEvent.Type.EXEC, plugin.getRegion(), plugin.getAgent(),
                             plugin.getPluginID(), params));
