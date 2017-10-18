@@ -11,9 +11,9 @@
 
 	<name>executor-plugin</name>
 	<description>Executor plugin for the IRNC grant project using the Cresco framework</description>
-	<url>http://gitlab.kyrc.info/irnc/executor-plugin.git</url>
+	<url>https://github.com/ResearchWorx/IRNC-Executor-Plugin.git</url>
 	<scm>
-		<connection>scm:git:git@gitlab.kyrc.info:irnc/executor-plugin.git</connection>
+		<connection>scm:git:git@github.com/ResearchWorx/IRNC-Executor-Plugin.git</connection>
 	</scm>
 
 	<dependencies>
