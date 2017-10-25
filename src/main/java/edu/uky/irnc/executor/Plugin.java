@@ -35,7 +35,7 @@ public class Plugin extends CPlugin {
 
     private static class Runner implements Runnable {
         private static Set<String> executables = new HashSet<>(Arrays.asList("netflow", "packet_trace",
-                "packet_validation", "sendudp", "kanon", "perfSONAR_Throughput", "amis_argus", "ls"));
+                "packet_validation", "sendudp", "kanon", "perfSONAR_Throughput", "amis_argus", "ls", "/home/yan/AMIS/amis"));
         private Plugin plugin;
         private CLogger logger;
         private String command;
