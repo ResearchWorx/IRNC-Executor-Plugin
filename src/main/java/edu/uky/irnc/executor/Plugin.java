@@ -124,6 +124,8 @@ public class Plugin extends CPlugin {
                     params.put("src_plugin", plugin.getPluginID());
                     //params.put("dst_region", plugin.getRegion());
                     //params.put("dst_agent", plugin.getAgent());
+                    params.put("inode_id", plugin.getConfig().getStringParam("inode_id"));
+                    params.put("resource_id", plugin.getConfig().getStringParam("resource_id"));
                     params.put("dst_region", dstRegion);
                     params.put("dst_agent", dstAgent);
                     params.put("dst_plugin", dstPlugin);
