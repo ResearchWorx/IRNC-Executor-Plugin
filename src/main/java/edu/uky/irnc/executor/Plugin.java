@@ -16,11 +16,18 @@ public class Plugin extends CPlugin {
 
     public void start() {
         String runCommand = config.getStringParam("runCommand");
+        //n0Params.put("dstRegion", plugin.getRegion());
+        //n0Params.put("dstAgent", plugin.getAgent());
+        //n0Params.put("dstPlugin", plugin.getPluginID());
+
+        String dstRegion = config.getStringParam("dstRegion");
+        String dstAgent = config.getStringParam("dstAgent");
         String dstPlugin = config.getStringParam("dstPlugin");
+
         String requiresSudo = config.getStringParam("requiresSudo", "true");
         logger.info("sudo = {}", requiresSudo);
         exchangeID = runCommand.substring(runCommand.lastIndexOf(" ") + 1);
-        executeCommand(runCommand, dstPlugin, requiresSudo);
+        executeCommand(runCommand, dstRegion, dstAgent, dstPlugin, requiresSudo);
     }
 
     @Override
@@ -28,8 +35,8 @@ public class Plugin extends CPlugin {
         runner.shutdown();
     }
 
-    private void executeCommand(String command, String dstPlugin, String requiresSudo) {
-        runner = new Runner(this, command, dstPlugin, requiresSudo);
+    private void executeCommand(String command, String dstRegion, String dstAgent, String dstPlugin, String requiresSudo) {
+        runner = new Runner(this, command, dstRegion, dstAgent, dstPlugin, requiresSudo);
         new Thread(runner).start();
     }
 
@@ -39,14 +46,18 @@ public class Plugin extends CPlugin {
         private Plugin plugin;
         private CLogger logger;
         private String command;
+        private String dstRegion;
+        private String dstAgent;
         private String dstPlugin;
         private String requiresSudo;
         private Process p;
         private boolean complete = false;
 
-        Runner(Plugin plugin, String command, String dstPlugin, String requiresSudo) {
+        Runner(Plugin plugin, String command, String dstRegion, String dstAgent, String dstPlugin, String requiresSudo) {
             this.plugin = plugin;
             this.command = command;
+            this.dstRegion = dstRegion;
+            this.dstAgent = dstAgent;
             this.dstPlugin = dstPlugin;
             this.requiresSudo = requiresSudo;
             logger = new CLogger(Runner.class, plugin.getMsgOutQueue(), plugin.getRegion(), plugin.getAgent(),
@@ -77,8 +88,8 @@ public class Plugin extends CPlugin {
 
                 if (!command.startsWith("sendudp")) {
                     logger.trace("Starting Output Forwarders");
-                    StreamGobbler errorGobbler = new StreamGobbler(p.getErrorStream(), plugin, dstPlugin);
-                    StreamGobbler outputGobbler = new StreamGobbler(p.getInputStream(), plugin, dstPlugin);
+                    StreamGobbler errorGobbler = new StreamGobbler(p.getErrorStream(), plugin, dstRegion, dstAgent, dstPlugin);
+                    StreamGobbler outputGobbler = new StreamGobbler(p.getInputStream(), plugin, dstRegion, dstAgent, dstPlugin);
 
                     errorGobbler.start();
                     outputGobbler.start();
@@ -94,8 +105,10 @@ public class Plugin extends CPlugin {
                     params.put("src_region", plugin.getRegion());
                     params.put("src_agent", plugin.getAgent());
                     params.put("src_plugin", plugin.getPluginID());
-                    params.put("dst_region", plugin.getRegion());
-                    params.put("dst_agent", plugin.getAgent());
+                    //params.put("dst_region", plugin.getRegion());
+                    //params.put("dst_agent", plugin.getAgent());
+                    params.put("dst_region", dstRegion);
+                    params.put("dst_agent", dstAgent);
                     params.put("dst_plugin", dstPlugin);
                     params.put("cmd", "execution_log");
                     params.put("exchange", exchangeID);
@@ -109,8 +122,10 @@ public class Plugin extends CPlugin {
                     params.put("src_region", plugin.getRegion());
                     params.put("src_agent", plugin.getAgent());
                     params.put("src_plugin", plugin.getPluginID());
-                    params.put("dst_region", plugin.getRegion());
-                    params.put("dst_agent", plugin.getAgent());
+                    //params.put("dst_region", plugin.getRegion());
+                    //params.put("dst_agent", plugin.getAgent());
+                    params.put("dst_region", dstRegion);
+                    params.put("dst_agent", dstAgent);
                     params.put("dst_plugin", dstPlugin);
                     params.put("cmd", "delete_exchange");
                     params.put("exchange", exchangeID);
@@ -140,12 +155,17 @@ public class Plugin extends CPlugin {
             private InputStream is;
             private Plugin plugin;
             private CLogger logger;
+            private String dstRegion;
+            private String dstAgent;
             private String dstPlugin;
 
-            StreamGobbler(InputStream is, Plugin plugin, String dstPlugin) {
+            StreamGobbler(InputStream is, Plugin plugin, String dstRegion, String dstAgent, String dstPlugin) {
                 this.is = is;
                 this.plugin = plugin;
+                this.dstRegion = dstRegion;
+                this.dstAgent = dstAgent;
                 this.dstPlugin = dstPlugin;
+
                 logger = new CLogger(StreamGobbler.class, plugin.getMsgOutQueue(), plugin.getRegion(),
                         plugin.getAgent(), plugin.getPluginID(), CLogger.Level.Trace);
             }
@@ -162,8 +182,10 @@ public class Plugin extends CPlugin {
                         params.put("src_region", plugin.getRegion());
                         params.put("src_agent", plugin.getAgent());
                         params.put("src_plugin", plugin.getPluginID());
-                        params.put("dst_region", plugin.getRegion());
-                        params.put("dst_agent", plugin.getAgent());
+                        //params.put("dst_region", plugin.getRegion());
+                        //params.put("dst_agent", plugin.getAgent());
+                        params.put("dst_region", dstRegion);
+                        params.put("dst_agent", dstAgent);
                         params.put("dst_plugin", dstPlugin);
                         params.put("ts", Long.toString(new Date().getTime()));
                         params.put("cmd", "execution_log");
