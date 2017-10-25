@@ -132,6 +132,22 @@ public class Plugin extends CPlugin {
                     plugin.sendMsgEvent(new MsgEvent(MsgEvent.Type.EXEC, plugin.getRegion(), plugin.getAgent(),
                             plugin.getPluginID(), params));
                 } else {
+                    logger.trace("Notify Caller That Exec has completed");
+                    Map<String, String> params = new HashMap<>();
+                    params = new HashMap<>();
+                    params.put("src_region", plugin.getRegion());
+                    params.put("src_agent", plugin.getAgent());
+                    params.put("src_plugin", plugin.getPluginID());
+                    //params.put("dst_region", plugin.getRegion());
+                    //params.put("dst_agent", plugin.getAgent());
+                    params.put("dst_region", dstRegion);
+                    params.put("dst_agent", dstAgent);
+                    params.put("dst_plugin", dstPlugin);
+                    params.put("cmd", "exec_complete");
+                    params.put("exchange", exchangeID);
+                    plugin.sendMsgEvent(new MsgEvent(MsgEvent.Type.EXEC, plugin.getRegion(), plugin.getAgent(),
+                            plugin.getPluginID(), params));
+                    /*
                     Thread.sleep(5000);
                     logger.trace("Sending Plugin Removal request");
                     Map<String, String> params = new HashMap<>();
@@ -144,6 +160,7 @@ public class Plugin extends CPlugin {
                     params.put("plugin", plugin.getPluginID());
                     plugin.sendMsgEvent(new MsgEvent(MsgEvent.Type.CONFIG, plugin.getRegion(), plugin.getAgent(),
                             plugin.getPluginID(), params));
+                            */
                 }
 
             } catch (Exception e) {
