@@ -55,9 +55,12 @@ public class Executor extends CExecutor {
                 new Thread(runner).start();
                 //todo do some status here
                 params.put("status", Boolean.toString(true));
-
-                return new MsgEvent(MsgEvent.Type.EXEC, plugin.getRegion(), plugin.getAgent(),
+                logger.info("Returning Message");
+                MsgEvent returnMsg = new MsgEvent(MsgEvent.Type.EXEC, plugin.getRegion(), plugin.getAgent(),
                         plugin.getPluginID(), params);
+                logger.info("Returning Message sent : " + returnMsg.getParams());
+
+                return returnMsg;
             case "status_process":
                 logger.trace("{} cmd received", msg.getParam("cmd"));
                 if (runner == null || !runner.isRunning()) {
