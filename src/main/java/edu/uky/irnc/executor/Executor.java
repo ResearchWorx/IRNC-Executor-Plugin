@@ -23,7 +23,7 @@ public class Executor extends CExecutor {
         super(plugin);
         this.plugin = plugin;
         this.logger = new CLogger(Executor.class, plugin.getMsgOutQueue(), plugin.getRegion(),
-                plugin.getAgent(), plugin.getPluginID(), CLogger.Level.Debug);
+                plugin.getAgent(), plugin.getPluginID(), CLogger.Level.Trace);
         this.command = command;
         this.exchangeID = exchangeID;
         this.dstRegion = dstRegion;
@@ -53,6 +53,9 @@ public class Executor extends CExecutor {
                 }
                 runner = new Runner(plugin, command, exchangeID, dstRegion, dstAgent, dstPlugin);
                 new Thread(runner).start();
+                //todo do some status here
+                params.put("status", Boolean.toString(true));
+
                 return new MsgEvent(MsgEvent.Type.EXEC, plugin.getRegion(), plugin.getAgent(),
                         plugin.getPluginID(), params);
             case "status_process":
