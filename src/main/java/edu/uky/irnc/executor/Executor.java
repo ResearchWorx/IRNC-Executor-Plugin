@@ -34,6 +34,7 @@ public class Executor extends CExecutor {
     @Override
     public MsgEvent processExec(MsgEvent msg) {
         logger.debug("Processing EXEC message: {}", msg.getParams());
+        /*
         Map<String, String> params = new HashMap<>();
         params.put("src_region", plugin.getRegion());
         params.put("src_agent", plugin.getAgent());
@@ -41,60 +42,57 @@ public class Executor extends CExecutor {
         params.put("dst_region", dstRegion);
         params.put("dst_agent", dstAgent);
         params.put("dst_plugin", dstPlugin);
-        params.put("error", Boolean.toString(false));
+        */
+        msg.setParam("error", Boolean.toString(false));
         switch (msg.getParam("cmd")) {
             case "run_process":
                 logger.trace("{} cmd received", msg.getParam("cmd"));
                 if (runner != null) {
-                    params.put("error", Boolean.toString(true));
-                    params.put("error_msg", "Process is already running");
-                    return new MsgEvent(MsgEvent.Type.EXEC, plugin.getRegion(), plugin.getAgent(),
-                            plugin.getPluginID(), params);
+                    msg.setParam("error", Boolean.toString(true));
+                    msg.setParam("error_msg", "Process is already running");
+                    return msg;
                 }
                 runner = new Runner(plugin, command, exchangeID, dstRegion, dstAgent, dstPlugin);
                 new Thread(runner).start();
                 //todo do some status here
-                params.put("status", Boolean.toString(true));
-                logger.info("Returning Message");
-                MsgEvent returnMsg = new MsgEvent(MsgEvent.Type.EXEC, plugin.getRegion(), plugin.getAgent(),
-                        plugin.getPluginID(), params);
-                logger.info("Returning Message sent : " + returnMsg.getParams());
+                msg.setParam("status", Boolean.toString(true));
+                //logger.info("Returning Message");
+                //MsgEvent returnMsg = new MsgEvent(MsgEvent.Type.EXEC, plugin.getRegion(), plugin.getAgent(),
+                //        plugin.getPluginID(), params);
+                //logger.info("Returning Message sent : " + returnMsg.getParams());
 
-                return returnMsg;
+                return msg;
             case "status_process":
                 logger.trace("{} cmd received", msg.getParam("cmd"));
                 if (runner == null || !runner.isRunning()) {
-                    params.put("status_runner", Boolean.toString(runner == null));
+                    msg.setParam("status_runner", Boolean.toString(runner == null));
                     if (runner == null)
-                        params.put("status_process", Boolean.toString(false));
+                        msg.setParam("status_process", Boolean.toString(false));
                     else
-                        params.put("status_process", Boolean.toString(runner.isRunning()));
+                        msg.setParam("status_process", Boolean.toString(runner.isRunning()));
                 } else
-                    params.put("status", Boolean.toString(true));
-                return new MsgEvent(MsgEvent.Type.EXEC, plugin.getRegion(), plugin.getAgent(),
-                        plugin.getPluginID(), params);
+                    msg.setParam("status", Boolean.toString(true));
+                return msg;
             case "end_process":
                 logger.trace("{} cmd received", msg.getParam("cmd"));
                 if (runner == null || !runner.isRunning()) {
-                    params.put("error", Boolean.toString(true));
+                    msg.setParam("error", Boolean.toString(true));
                     if (runner == null)
-                        params.put("error_msg", "Process is not currently running");
+                        msg.setParam("error_msg", "Process is not currently running");
                     else
-                        params.put("error_msg", "Process could not be run");
-                    return new MsgEvent(MsgEvent.Type.EXEC, plugin.getRegion(), plugin.getAgent(),
-                            plugin.getPluginID(), params);
+                        msg.setParam("error_msg", "Process could not be run");
+                    return msg;
                 }
                 runner.shutdown();
                 runner = null;
-                return new MsgEvent(MsgEvent.Type.EXEC, plugin.getRegion(), plugin.getAgent(),
-                        plugin.getPluginID(), params);
+                return msg;
             default:
                 logger.error("Unknown cmd: {}", msg.getParam("cmd"));
-                params.put("error", Boolean.toString(true));
-                params.put("error_msg", "Unknown cmd  [" + msg.getParam("cmd") + "]");
-                break;
+                msg.setParam("error", Boolean.toString(true));
+                msg.setParam("error_msg", "Unknown cmd  [" + msg.getParam("cmd") + "]");
+                return msg;
         }
-        return null;
+
     }
 
     void shutdown() {
