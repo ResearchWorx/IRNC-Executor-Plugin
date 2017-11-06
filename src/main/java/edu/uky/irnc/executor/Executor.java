@@ -85,6 +85,9 @@ public class Executor extends CExecutor {
                 }
                 runner.shutdown();
                 runner = null;
+
+                msg.setParam("status", Boolean.toString(true));
+
                 return msg;
             default:
                 logger.error("Unknown cmd: {}", msg.getParam("cmd"));
