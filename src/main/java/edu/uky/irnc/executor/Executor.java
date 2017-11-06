@@ -48,9 +48,13 @@ public class Executor extends CExecutor {
             case "run_process":
                 logger.trace("{} cmd received", msg.getParam("cmd"));
                 if (runner != null) {
-                    msg.setParam("error", Boolean.toString(true));
-                    msg.setParam("error_msg", "Process is already running");
-                    return msg;
+                    if(runner.isRunning()) {
+                        logger.error("Trying to run, but runner != null, STOP first.");
+                        msg.setParam("error", Boolean.toString(true));
+                        msg.setParam("error_msg", "Process is already running");
+                        return msg;
+                    }
+                    runner = null;
                 }
                 runner = new Runner(plugin, command, exchangeID, dstRegion, dstAgent, dstPlugin);
                 new Thread(runner).start();
