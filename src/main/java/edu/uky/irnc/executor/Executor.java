@@ -104,7 +104,9 @@ public class Executor extends CExecutor {
 
     void shutdown() {
         logger.debug("Call to Shutdown()");
-        runner.shutdown();
-        runner = null;
+        if(runner != null) {
+            runner.shutdown();
+            runner = null;
+        }
     }
 }
