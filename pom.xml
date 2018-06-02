@@ -29,6 +29,13 @@
 			<version>4.9</version>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>com.github.dblock</groupId>
+			<artifactId>oshi-core</artifactId>
+			<version>3.4.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

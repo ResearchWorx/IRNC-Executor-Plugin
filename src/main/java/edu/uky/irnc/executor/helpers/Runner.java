@@ -52,7 +52,13 @@ public class Runner implements Runnable {
             logger.trace("Starting Process");
             Process p = pb.start();
 
+
             if (!command.startsWith("sendudp")) {
+                logger.trace("Starting Metric Collection");
+                RunnerMetrics runnerMetrics = new RunnerMetrics(plugin, command);
+                new Thread(runnerMetrics).start();
+                //runnerMetrics.start();
+
                 logger.trace("Starting Output Forwarders");
                 StreamGobbler errorGobbler = new StreamGobbler(p.getErrorStream(), "Error",
                         plugin, exchangeID, dstRegion, dstAgent, dstPlugin);
